@@ -7,7 +7,6 @@ type FilterSelectorPropsType = {
 const FilterSelector = ({setFilterSelectorValue}: FilterSelectorPropsType) => {
     const select = (event: ChangeEvent<HTMLSelectElement>) => {
         const selectValue = event.currentTarget.value
-        console.log(selectValue)
         setFilterSelectorValue(selectValue)
     }
     return (

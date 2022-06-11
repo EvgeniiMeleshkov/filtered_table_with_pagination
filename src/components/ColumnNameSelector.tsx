@@ -8,7 +8,6 @@ type ColumnNameSelectorPropsType = {
 const ColumnNameSelector = ({setColumnNameSelectorValue}: ColumnNameSelectorPropsType) => {
     const select = (event: any) => {
         const selectValue = event.currentTarget.value
-        console.log(selectValue)
         setColumnNameSelectorValue(selectValue)
     }
     return (
