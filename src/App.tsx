@@ -42,89 +42,88 @@ function App() {
         setData(array)
         setValue('')
     }
-    const [filtered, setFiltered] = useState<ResponseType>([])
-
+    let filtered: ResponseType = []
 
     const searchCallBack = () => {
 
         if (filterSelectorValue === 'contains' && columnNameSelectorValue === 'name') {
-            setData(data.filter((el) => {
+            filtered = data.filter((el) => {
                 return el.name.toLowerCase().includes(value.toLowerCase())
-            }))
-
+            })
+            setData(filtered)
         }
-//         if (filterSelectorValue === 'contains' && columnNameSelectorValue === 'amount') {
-//             filtered = data.filter((el) => {
-//                 return el.amount.toString().includes(value);
-//             });
-//             setData(filtered)
-//         }
-//         if (filterSelectorValue === 'contains' && columnNameSelectorValue === 'distance') {
-//             filtered = data.filter((el) => {
-//                 return el.distance.toString().includes(value)
-//             })
-//             setData(filtered)
-//         }
-//
-// //----------------------------------------
-//         if (filterSelectorValue === '>' && columnNameSelectorValue === 'amount') {
-//             filtered = data.filter((el) => {
-//                 return el.amount > parseInt(value)
-//             });
-//             setData(filtered)
-//         }
-//         if (filterSelectorValue === '>' && columnNameSelectorValue === 'distance') {
-//             filtered = data.filter((el) => {
-//                 return el.distance > parseInt(value)
-//             });
-//             setData(filtered)
-//         }
-//         if (filterSelectorValue === '>' && columnNameSelectorValue === 'name') {
-//             filtered = data.filter((el) => {
-//                 return el.name.toLowerCase() > value.toLowerCase()
-//             });
-//             setData(filtered)
-//         }
-//
-// //----------------------------------------
-//         if (filterSelectorValue === '<' && columnNameSelectorValue === 'amount') {
-//             filtered = data.filter((el) => {
-//                 return el.amount < parseInt(value)
-//             });
-//             setData(filtered)
-//         }
-//         if (filterSelectorValue === '<' && columnNameSelectorValue === 'distance') {
-//             filtered = data.filter((el) => {
-//                 return el.distance < parseInt(value)
-//             });
-//             setData(filtered)
-//         }
-//         if (filterSelectorValue === '<' && columnNameSelectorValue === 'name') {
-//             filtered = data.filter((el) => {
-//                 return el.name.toLowerCase() < value.toLowerCase()
-//             });
-//             setData(filtered)
-//         }
-//
-// //---------------------------------------
-//         if (filterSelectorValue === '=' && columnNameSelectorValue === 'amount') {
-//             filtered = data.filter((el) => {
-//                 return el.amount === parseInt(value)
-//             });
-//             setData(filtered)
-//         }
-//         if (filterSelectorValue === '=' && columnNameSelectorValue === 'distance') {
-//             filtered = data.filter((el) => {
-//                 return el.distance === parseInt(value)
-//             });
-//             setData(filtered)
-//         }
-//         if (filterSelectorValue === '=' && columnNameSelectorValue === 'name') {
-//             filtered = data.filter((el) => {
-//                 return el.name.toLowerCase() === value.toLowerCase()
-//             });
-//             setData(filtered)
-//         }
+        if (filterSelectorValue === 'contains' && columnNameSelectorValue === 'amount') {
+            filtered = data.filter((el) => {
+                return el.amount.toString().includes(value);
+            });
+            setData(filtered)
+        }
+        if (filterSelectorValue === 'contains' && columnNameSelectorValue === 'distance') {
+            filtered = data.filter((el) => {
+                return el.distance.toString().includes(value)
+            })
+            setData(filtered)
+        }
+
+//----------------------------------------
+        if (filterSelectorValue === '>' && columnNameSelectorValue === 'amount') {
+            filtered = data.filter((el) => {
+                return el.amount > parseInt(value)
+            });
+            setData(filtered)
+        }
+        if (filterSelectorValue === '>' && columnNameSelectorValue === 'distance') {
+            filtered = data.filter((el) => {
+                return el.distance > parseInt(value)
+            });
+            setData(filtered)
+        }
+        if (filterSelectorValue === '>' && columnNameSelectorValue === 'name') {
+            filtered = data.filter((el) => {
+                return el.name.toLowerCase() > value.toLowerCase()
+            });
+            setData(filtered)
+        }
+
+//----------------------------------------
+        if (filterSelectorValue === '<' && columnNameSelectorValue === 'amount') {
+            filtered = data.filter((el) => {
+                return el.amount < parseInt(value)
+            });
+            setData(filtered)
+        }
+        if (filterSelectorValue === '<' && columnNameSelectorValue === 'distance') {
+            filtered = data.filter((el) => {
+                return el.distance < parseInt(value)
+            });
+            setData(filtered)
+        }
+        if (filterSelectorValue === '<' && columnNameSelectorValue === 'name') {
+            filtered = data.filter((el) => {
+                return el.name.toLowerCase() < value.toLowerCase()
+            });
+            setData(filtered)
+        }
+
+//---------------------------------------
+        if (filterSelectorValue === '=' && columnNameSelectorValue === 'amount') {
+            filtered = data.filter((el) => {
+                return el.amount === parseInt(value)
+            });
+            setData(filtered)
+        }
+        if (filterSelectorValue === '=' && columnNameSelectorValue === 'distance') {
+            filtered = data.filter((el) => {
+                return el.distance === parseInt(value)
+            });
+            setData(filtered)
+        }
+        if (filterSelectorValue === '=' && columnNameSelectorValue === 'name') {
+            filtered = data.filter((el) => {
+                return el.name.toLowerCase() === value.toLowerCase()
+            });
+            setData(filtered)
+        }
     }
 
 
