@@ -41,21 +41,21 @@ function App() {
     }
 
     const filterInput = (e: ChangeEvent<HTMLInputElement>) => {
-        const filtered: ResponseType = structuredClone(data)
+
         let currentValue = e.target.value
         setValue(currentValue)
 
         if (filterSelectorValue === 'contains') {
             columnNameSelectorValue === 'name' &&
-            setData(filtered.filter((el) => {
+            setData(data.filter((el) => {
                 return el.name.toLowerCase().match(value.toLowerCase())
             }));
             columnNameSelectorValue === 'amount' &&
-            setData(filtered.filter((el) => {
+            setData(data.filter((el) => {
                 return el.amount.toString().includes(value);
             }));
             columnNameSelectorValue === 'distance' &&
-            setData(filtered.filter((el) => {
+            setData(data.filter((el) => {
                 return el.distance.toString().includes(value)
             }));
         }
