@@ -118,8 +118,8 @@ function App() {
     const [totalPages, setTotalPages] = useState(0)
     const [currentPage, setCurrentPage] = useState(1)
     const [disableNext, setDisableNext] = useState('')
-    const [isActive, setIsActive] = useState('')
-    const [disablePrevious, setDisablePrevious] = useState('')
+    const [isActive, setIsActive] = useState('active')
+    const [disablePrevious, setDisablePrevious] = useState('disabled')
     const lastItem = currentPage * limitCountPage
     const firstItem = lastItem - limitCountPage + 1
     const currentPortion = data.slice(firstItem, lastItem)
@@ -127,10 +127,9 @@ function App() {
 
     const currentPageCallBack = (page: number) => {
         setCurrentPage(page)
-        console.log('hi')
-        setDisableNext('')
-        setDisablePrevious('')
         setIsActive('active')
+        setDisablePrevious('')
+        setDisableNext('')
     }
     useEffect(() => {
         setTotalRows(data.length)
@@ -147,15 +146,17 @@ function App() {
             return
         }
         setCurrentPage(currentPage + 1)
+        setIsActive('active')
         setDisablePrevious('')
     }
     const onPrevious = () => {
-        if (currentPage < 2) {
+        if (currentPage === 1) {
             setDisablePrevious('disabled')
-            return
+        } else {
+            setCurrentPage(currentPage - 1)
+            setIsActive('active')
+            setDisableNext('')
         }
-        setCurrentPage(currentPage - 1)
-        setDisableNext('')
     }
     return (
         <div className="container">
