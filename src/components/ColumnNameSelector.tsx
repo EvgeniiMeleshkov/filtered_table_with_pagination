@@ -1,11 +1,12 @@
-import React, {ChangeEvent} from 'react';
+import React from 'react';
 
-//export type ColumnNameSelectorValueType = 'name' | 'amount' | 'distance' | ''
+export type ColumnNameSelectorValueType = 'name' | 'amount' | 'distance'
 type ColumnNameSelectorPropsType = {
-    setColumnNameSelectorValue: (value: string) => void
+    setColumnNameSelectorValue: (value: ColumnNameSelectorValueType) => void
 }
+
 const ColumnNameSelector = ({setColumnNameSelectorValue}: ColumnNameSelectorPropsType) => {
-    const select = (event: ChangeEvent<HTMLSelectElement>) => {
+    const select = (event: any) => {
         const selectValue = event.currentTarget.value
         console.log(selectValue)
         setColumnNameSelectorValue(selectValue)

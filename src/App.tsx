@@ -6,6 +6,7 @@ import Loader from './components/Loader/Loader';
 import Header from './components/Header';
 import TableHead from './components/TableHead';
 import Paginator from './components/Paginator/Paginator';
+import FilterSelector from './components/FilterSelector';
 
 export type ResponseElementType = {
     index: number
@@ -17,7 +18,7 @@ export type ResponseElementType = {
 export type ResponseType = Array<ResponseElementType>
 
 function App() {
-    const baseUrl = 'https://filltext.com/?rows=500&index={index}&date={date|1-1-1999,1-1-2050}&name={firstName}&amount={number|500}&distance={number|500}'
+    const baseUrl = 'https://filltext.com/?rows=500&index={index}&date={date|1-1-1999,1-1-2030}&name={firstName}&amount={number|1000}&distance={number|1000}'
 
     const [data, setData] = useState<ResponseType>([])
     const [array, setArray] = useState<ResponseType>([])
@@ -39,77 +40,30 @@ function App() {
         setData(array)
         setIsLoading(false)
     }
+    const getFilteredData = (filter: string) => {
+        if(!value) {
+            return data
+        }
+        if(filter === 'contains') {
+            return data.filter(el => {
+                return (
+                    el['name'].toLowerCase().includes(value.toLowerCase())
+                    || el['amount'].toString().includes(value.toLowerCase())
+                    || el['distance'].toString().includes(value.toLowerCase())
+                )
+            })
+        }
+    }
+    const filteredData: ResponseType | undefined = getFilteredData(filterSelectorValue)
 
     const filterInput = (e: ChangeEvent<HTMLInputElement>) => {
-
         let currentValue = e.target.value
         setValue(currentValue)
-
-        if (filterSelectorValue === 'contains') {
-            columnNameSelectorValue === 'name' &&
-            setData(data.filter((el) => {
-                return el.name.toLowerCase().match(value.toLowerCase())
-            }));
-            columnNameSelectorValue === 'amount' &&
-            setData(data.filter((el) => {
-                return el.amount.toString().includes(value);
-            }));
-            columnNameSelectorValue === 'distance' &&
-            setData(data.filter((el) => {
-                return el.distance.toString().includes(value)
-            }));
-        }
     }
 
     const resetCallBack = () => {
         setData(array)
         setValue('')
-    }
-
-
-    const searchCallBack = () => {
-        if (filterSelectorValue === '>') {
-            columnNameSelectorValue === 'amount' &&
-            setData(data.filter((el) => {
-                return el.amount > Number(value)
-            }));
-            columnNameSelectorValue === 'distance' &&
-            setData(data.filter((el) => {
-                return el.distance > Number(value)
-            }));
-            columnNameSelectorValue === 'name' &&
-            setData(data.filter((el) => {
-                return el.name.toLowerCase() > value.toLowerCase()
-            }));
-        }
-        if (filterSelectorValue === '<') {
-            columnNameSelectorValue === 'amount' &&
-            setData(data.filter((el) => {
-                return el.amount < Number(value)
-            }));
-            columnNameSelectorValue === 'distance' &&
-            setData(data.filter((el) => {
-                return el.distance < Number(value)
-            }));
-            columnNameSelectorValue === 'name' &&
-            setData(data.filter((el) => {
-                return el.name.toLowerCase() < value.toLowerCase()
-            }));
-        }
-        if (filterSelectorValue === '=') {
-            columnNameSelectorValue === 'amount' &&
-            setData(data.filter((el) => {
-                return el.amount === Number(value)
-            }));
-            columnNameSelectorValue === 'distance' &&
-            setData(data.filter((el) => {
-                return el.distance === Number(value)
-            }));
-            columnNameSelectorValue === 'name' &&
-            setData(data.filter((el) => {
-                return el.name.toLowerCase() === value.toLowerCase()
-            }));
-        }
     }
 
 
@@ -122,7 +76,7 @@ function App() {
     const [disablePrevious, setDisablePrevious] = useState('disabled')
     const lastItem = currentPage * limitCountPage
     const firstItem = lastItem - limitCountPage + 1
-    const currentPortion = data.slice(firstItem, lastItem)
+    const currentPortion = filteredData!.slice(firstItem, lastItem)
 
 
     const currentPageCallBack = (page: number) => {
@@ -132,7 +86,7 @@ function App() {
         setDisableNext('')
     }
     useEffect(() => {
-        setTotalRows(data.length)
+        setTotalRows(filteredData!.length)
         const portion = totalRows / limitCountPage
         setTotalPages(portion)
     })
@@ -164,7 +118,7 @@ function App() {
                 filterSelectorValue={filterSelectorValue}
                 filter={filterInput}
                 value={value}
-                searchCallBack={searchCallBack}
+                //searchCallBack={searchCallBack}
                 resetCallBack={resetCallBack}
                 setColumnNameSelectorValue={setColumnNameSelectorValue}
                 setFilterSelectorValue={setFilterSelectorValue}
