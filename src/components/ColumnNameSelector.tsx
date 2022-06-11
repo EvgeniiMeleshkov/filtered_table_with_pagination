@@ -12,7 +12,7 @@ const ColumnNameSelector = ({setColumnNameSelectorValue}: ColumnNameSelectorProp
         setColumnNameSelectorValue(selectValue)
     }
     return (
-        <select onChange={select} name="column">
+        <select className='columnSelect' onChange={select} name="column">
             <optgroup label="Column">
                 <option value="name">Name</option>
                 <option value="amount">Amount</option>

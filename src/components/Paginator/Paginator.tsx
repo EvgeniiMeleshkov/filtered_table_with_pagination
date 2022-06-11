@@ -27,7 +27,7 @@ const Paginator = ({
     )
 
     return (
-        <nav aria-label="...">
+        <nav aria-label="..." className='navPagination'>
             <ul className="pagination">
                 <li className={`page-item ${disablePrevious}`}>
                     <a className="page-link" href="#" tabIndex = {-1} onClick={onPrevious}>Previous</a>

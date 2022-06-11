@@ -3,7 +3,6 @@ import ColumnNameSelector from './ColumnNameSelector';
 import FilterSelector from './FilterSelector';
 
 type HeaderPropsType = {
-    onButtonHandler: () => void
     setColumnNameSelectorValue: (value: string) => void
     setFilterSelectorValue: (value: string) => void
     filter: (e: ChangeEvent<HTMLInputElement>) => void
@@ -13,16 +12,14 @@ type HeaderPropsType = {
 const Header = ({
                     filter,
                     value,
-                    onButtonHandler,
                     setFilterSelectorValue,
                     setColumnNameSelectorValue
                 }: HeaderPropsType) => {
     return (
         <header className="App-header">
-            <button onClick={onButtonHandler}>GetData</button>
             <ColumnNameSelector setColumnNameSelectorValue={setColumnNameSelectorValue}/>
             <FilterSelector setFilterSelectorValue={setFilterSelectorValue}/>
-            <input onChange={filter} value={value}/>
+            <input className='filterInput' onChange={filter} value={value}/>
         </header>
 
     );

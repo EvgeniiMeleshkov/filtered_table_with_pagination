@@ -30,16 +30,10 @@ function App() {
     useEffect(() => {
         setIsLoading(true)
         axios.get(baseUrl).then((response: AxiosResponse<ResponseType>) => {
-            setArray(response.data)
+            setData(response.data)
             setIsLoading(false)
         });
     }, [])
-//---------------------------------------------------------------------
-//--------CallBack to show data----------------------------------------
-    const onButtonHandler = () => {
-        setData(array)
-        setIsLoading(false)
-    }
 //---------------------------------------------------------------------
 //---------Getting value from search field-----------------------------
     const filterInput = (e: ChangeEvent<HTMLInputElement>) => {
@@ -181,8 +175,7 @@ function App() {
                 filter={filterInput}
                 value={value}
                 setColumnNameSelectorValue={setColumnNameSelectorValue}
-                setFilterSelectorValue={setFilterSelectorValue}
-                onButtonHandler={onButtonHandler}/>
+                setFilterSelectorValue={setFilterSelectorValue}/>
 
             {data.length !== 0 &&
                 <Paginator
