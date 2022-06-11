@@ -8,12 +8,10 @@ type HeaderPropsType = {
     setFilterSelectorValue: (value: string) => void
     filter: (e: ChangeEvent<HTMLInputElement>) => void
     value: string
-    filterSelectorValue: string
 }
 
 const Header = ({
                     filter,
-                    filterSelectorValue,
                     value,
                     onButtonHandler,
                     setFilterSelectorValue,
