@@ -113,53 +113,74 @@ function App() {
     }
 
 
+    const limitCountPage = 30
+    const [totalRows, setTotalRows] = useState(0)
+    const [totalPages, setTotalPages] = useState(0)
+    const [currentPage, setCurrentPage] = useState(1)
+    const [disableNext, setDisableNext] = useState('')
+    const [isActive, setIsActive] = useState('')
+    const [disablePrevious, setDisablePrevious] = useState('')
+    const lastItem = currentPage * limitCountPage
+    const firstItem = lastItem - limitCountPage + 1
+    const currentPortion = data.slice(firstItem, lastItem)
 
-const limitCountPage = 30
-const [totalRows, setTotalRows] = useState(0)
-const [totalPages, setTotalPages] = useState(0)
-const [currentPage, setCurrentPage] = useState(1)
-const lastItem = currentPage * limitCountPage
-const firstItem = lastItem - limitCountPage + 1
-const currentPortion = data.slice(firstItem, lastItem)
 
+    const currentPageCallBack = (page: number) => {
+        setCurrentPage(page)
+        console.log('hi')
+        setDisableNext('')
+        setDisablePrevious('')
+        setIsActive('active')
+    }
+    useEffect(() => {
+        setTotalRows(data.length)
+        const portion = totalRows / limitCountPage
+        setTotalPages(portion)
+    })
+    let pages = []
+    for (let i = 1; i < totalPages; i++) {
+        pages.push(i)
+    }
+    const onNext = () => {
+        if (currentPage > totalPages - 1) {
+            setDisableNext('disabled')
+            return
+        }
+        setCurrentPage(currentPage + 1)
+        setDisablePrevious('')
+    }
+    const onPrevious = () => {
+        if (currentPage < 2) {
+            setDisablePrevious('disabled')
+            return
+        }
+        setCurrentPage(currentPage - 1)
+        setDisableNext('')
+    }
+    return (
+        <div className="container">
+            <Header
+                filterSelectorValue={filterSelectorValue}
+                filter={filterInput}
+                value={value}
+                searchCallBack={searchCallBack}
+                resetCallBack={resetCallBack}
+                setColumnNameSelectorValue={setColumnNameSelectorValue}
+                setFilterSelectorValue={setFilterSelectorValue}
+                onButtonHandler={onButtonHandler}/>
+            <Paginator currentPage={currentPage} isActive={isActive} disablePrevious={disablePrevious} disableNext={disableNext} onPrevious={onPrevious} onNext={onNext} currentPageCallBack={currentPageCallBack} pages={pages}/>
+            <table className="table">
+                <TableHead/>
+                {!isLoading
+                    ?
+                    <TableData data={currentPortion}/>
+                    :
+                    <Loader/>
+                }
+            </table>
 
-const currentPageCallBack = (page: number) => {
-    setCurrentPage(page)
-    console.log('hi')
-}
-useEffect(() => {
-    setTotalRows(data.length)
-    const portion = totalRows / limitCountPage
-    setTotalPages(portion)
-})
-let pages = []
-for (let i = 1; i < totalPages; i++) {
-    pages.push(i)
-}
-return (
-    <div className="container">
-        <Header
-            filterSelectorValue={filterSelectorValue}
-            filter={filterInput}
-            value={value}
-            searchCallBack={searchCallBack}
-            resetCallBack={resetCallBack}
-            setColumnNameSelectorValue={setColumnNameSelectorValue}
-            setFilterSelectorValue={setFilterSelectorValue}
-            onButtonHandler={onButtonHandler}/>
-        <Paginator currentPageCallBack={currentPageCallBack} pages={pages}/>
-        <table className="table">
-            <TableHead/>
-            {!isLoading
-                ?
-                <TableData data={currentPortion}/>
-                :
-                <Loader/>
-            }
-        </table>
-
-    </div>
-);
+        </div>
+    );
 }
 
 export default App;
