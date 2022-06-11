@@ -17,162 +17,149 @@ export type ResponseElementType = {
 export type ResponseType = Array<ResponseElementType>
 
 function App() {
-    const baseUrl = 'https://filltext.com/?rows=100&index={index}&date={date|1-1-1999,1-1-2050}&name={firstName}&amount={number|500}&distance={number|500}'
+    const baseUrl = 'https://filltext.com/?rows=500&index={index}&date={date|1-1-1999,1-1-2050}&name={firstName}&amount={number|500}&distance={number|500}'
 
     const [data, setData] = useState<ResponseType>([])
     const [array, setArray] = useState<ResponseType>([])
     const [filterSelectorValue, setFilterSelectorValue] = useState('contains')
     const [columnNameSelectorValue, setColumnNameSelectorValue] = useState('name')
     const [value, setValue] = useState('')
+    const [isLoading, setIsLoading] = useState(false)
+
+    useEffect(() => {
+        setIsLoading(true)
+        axios.get(baseUrl).then((response: AxiosResponse<ResponseType>) => {
+
+            setArray(response.data)
+            setIsLoading(false)
+        });
+    }, [])
 
     const onButtonHandler = () => {
-         axios.get(baseUrl).then((response: AxiosResponse<ResponseType>) => {
-            setArray(response.data)
-             setData(array)
-        })
+        setData(array)
+        setIsLoading(false)
     }
 
-    const filter = (e: ChangeEvent<HTMLInputElement>) => {
+    const filterInput = (e: ChangeEvent<HTMLInputElement>) => {
+        const filtered: ResponseType = structuredClone(data)
         let currentValue = e.currentTarget.value
         setValue(currentValue)
-        searchCallBack()
+
+        if (filterSelectorValue === 'contains') {
+            columnNameSelectorValue === 'name' &&
+            setData(filtered.filter((el) => {
+                return el.name.toLowerCase().match(value.toLowerCase())
+            }));
+            columnNameSelectorValue === 'amount' &&
+            setData(filtered.filter((el) => {
+                return el.amount.toString().includes(value);
+            }));
+            columnNameSelectorValue === 'distance' &&
+            setData(filtered.filter((el) => {
+                return el.distance.toString().includes(value)
+            }));
+        }
     }
 
     const resetCallBack = () => {
         setData(array)
         setValue('')
     }
-    let filtered: ResponseType = []
+
 
     const searchCallBack = () => {
-
-        if (filterSelectorValue === 'contains' && columnNameSelectorValue === 'name') {
-            filtered = data.filter((el) => {
-                return el.name.toLowerCase().includes(value.toLowerCase())
-            })
-            setData(filtered)
-        }
-        if (filterSelectorValue === 'contains' && columnNameSelectorValue === 'amount') {
-            filtered = data.filter((el) => {
-                return el.amount.toString().includes(value);
-            });
-            setData(filtered)
-        }
-        if (filterSelectorValue === 'contains' && columnNameSelectorValue === 'distance') {
-            filtered = data.filter((el) => {
-                return el.distance.toString().includes(value)
-            })
-            setData(filtered)
-        }
-
-//----------------------------------------
-        if (filterSelectorValue === '>' && columnNameSelectorValue === 'amount') {
-            filtered = data.filter((el) => {
-                return el.amount > parseInt(value)
-            });
-            setData(filtered)
-        }
-        if (filterSelectorValue === '>' && columnNameSelectorValue === 'distance') {
-            filtered = data.filter((el) => {
-                return el.distance > parseInt(value)
-            });
-            setData(filtered)
-        }
-        if (filterSelectorValue === '>' && columnNameSelectorValue === 'name') {
-            filtered = data.filter((el) => {
+        if (filterSelectorValue === '>') {
+            columnNameSelectorValue === 'amount' &&
+            setData(data.filter((el) => {
+                return el.amount > Number(value)
+            }));
+            columnNameSelectorValue === 'distance' &&
+            setData(data.filter((el) => {
+                return el.distance > Number(value)
+            }));
+            columnNameSelectorValue === 'name' &&
+            setData(data.filter((el) => {
                 return el.name.toLowerCase() > value.toLowerCase()
-            });
-            setData(filtered)
+            }));
         }
-
-//----------------------------------------
-        if (filterSelectorValue === '<' && columnNameSelectorValue === 'amount') {
-            filtered = data.filter((el) => {
-                return el.amount < parseInt(value)
-            });
-            setData(filtered)
-        }
-        if (filterSelectorValue === '<' && columnNameSelectorValue === 'distance') {
-            filtered = data.filter((el) => {
-                return el.distance < parseInt(value)
-            });
-            setData(filtered)
-        }
-        if (filterSelectorValue === '<' && columnNameSelectorValue === 'name') {
-            filtered = data.filter((el) => {
+        if (filterSelectorValue === '<') {
+            columnNameSelectorValue === 'amount' &&
+            setData(data.filter((el) => {
+                return el.amount < Number(value)
+            }));
+            columnNameSelectorValue === 'distance' &&
+            setData(data.filter((el) => {
+                return el.distance < Number(value)
+            }));
+            columnNameSelectorValue === 'name' &&
+            setData(data.filter((el) => {
                 return el.name.toLowerCase() < value.toLowerCase()
-            });
-            setData(filtered)
+            }));
         }
-
-//---------------------------------------
-        if (filterSelectorValue === '=' && columnNameSelectorValue === 'amount') {
-            filtered = data.filter((el) => {
-                return el.amount === parseInt(value)
-            });
-            setData(filtered)
-        }
-        if (filterSelectorValue === '=' && columnNameSelectorValue === 'distance') {
-            filtered = data.filter((el) => {
-                return el.distance === parseInt(value)
-            });
-            setData(filtered)
-        }
-        if (filterSelectorValue === '=' && columnNameSelectorValue === 'name') {
-            filtered = data.filter((el) => {
+        if (filterSelectorValue === '=') {
+            columnNameSelectorValue === 'amount' &&
+            setData(data.filter((el) => {
+                return el.amount === Number(value)
+            }));
+            columnNameSelectorValue === 'distance' &&
+            setData(data.filter((el) => {
+                return el.distance === Number(value)
+            }));
+            columnNameSelectorValue === 'name' &&
+            setData(data.filter((el) => {
                 return el.name.toLowerCase() === value.toLowerCase()
-            });
-            setData(filtered)
+            }));
         }
     }
 
 
-    const limitCountPage = 10
-    const [totalRows, setTotalRows] = useState(0)
-    const [totalPages, setTotalPages] = useState(0)
-    const [currentPage, setCurrentPage] = useState(1)
-    const lastItem = currentPage * limitCountPage
-    const firstItem = lastItem - limitCountPage + 1
-    const currentPortion = data.slice(firstItem, lastItem)
+
+const limitCountPage = 30
+const [totalRows, setTotalRows] = useState(0)
+const [totalPages, setTotalPages] = useState(0)
+const [currentPage, setCurrentPage] = useState(1)
+const lastItem = currentPage * limitCountPage
+const firstItem = lastItem - limitCountPage + 1
+const currentPortion = data.slice(firstItem, lastItem)
 
 
-    const currentPageCallBack = (page: number) => {
-        setCurrentPage(page)
-        console.log('hi')
-    }
-    useEffect(() => {
-        setTotalRows(data.length)
-        const portion = totalRows / limitCountPage
-        setTotalPages(portion)
-    })
-    let pages = []
-    for (let i = 1; i < totalPages; i++) {
-        pages.push(i)
-    }
-    return (
-        <div className="container">
-            <Header
-                filterSelectorValue={filterSelectorValue}
-                filter={filter}
-                value={value}
-                searchCallBack={searchCallBack}
-                resetCallBack={resetCallBack}
-                setColumnNameSelectorValue={setColumnNameSelectorValue}
-                setFilterSelectorValue={setFilterSelectorValue}
-                onButtonHandler={onButtonHandler}/>
-            <Paginator currentPageCallBack={currentPageCallBack} pages={pages}/>
-            <table className="table">
-                <TableHead/>
-                {data.length !== 0
-                    ?
-                    <TableData data={currentPortion}/>
-                    :
-                    <Loader/>
-                }
-            </table>
+const currentPageCallBack = (page: number) => {
+    setCurrentPage(page)
+    console.log('hi')
+}
+useEffect(() => {
+    setTotalRows(data.length)
+    const portion = totalRows / limitCountPage
+    setTotalPages(portion)
+})
+let pages = []
+for (let i = 1; i < totalPages; i++) {
+    pages.push(i)
+}
+return (
+    <div className="container">
+        <Header
+            filterSelectorValue={filterSelectorValue}
+            filter={filterInput}
+            value={value}
+            searchCallBack={searchCallBack}
+            resetCallBack={resetCallBack}
+            setColumnNameSelectorValue={setColumnNameSelectorValue}
+            setFilterSelectorValue={setFilterSelectorValue}
+            onButtonHandler={onButtonHandler}/>
+        <Paginator currentPageCallBack={currentPageCallBack} pages={pages}/>
+        <table className="table">
+            <TableHead/>
+            {!isLoading
+                ?
+                <TableData data={currentPortion}/>
+                :
+                <Loader/>
+            }
+        </table>
 
-        </div>
-    );
+    </div>
+);
 }
 
 export default App;

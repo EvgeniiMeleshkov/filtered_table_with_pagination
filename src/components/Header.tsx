@@ -29,10 +29,13 @@ const Header = ({
             <ColumnNameSelector setColumnNameSelectorValue={setColumnNameSelectorValue}/>
             <FilterSelector setFilterSelectorValue={setFilterSelectorValue}/>
             <input onChange={filter} value={value}/>
-
+            {filterSelectorValue !== 'contains'
+                ? <>
                     <button onClick={searchCallBack}>search</button>
                     <button onClick={resetCallBack}>reset search</button>
-
+                </>
+                : <button onClick={resetCallBack}>reset search</button>
+            }
         </header>
 
     );

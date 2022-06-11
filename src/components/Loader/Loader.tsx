@@ -1,9 +1,10 @@
 import React from 'react';
+import './Loader.css'
 
 const Loader = () => {
     return (
-        <div>
-            Loader
+        <div className='lds-dual-ring'>
+
         </div>
     );
 };
