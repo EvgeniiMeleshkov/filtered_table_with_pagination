@@ -42,7 +42,7 @@ function App() {
 
     const filterInput = (e: ChangeEvent<HTMLInputElement>) => {
         const filtered: ResponseType = structuredClone(data)
-        let currentValue = e.currentTarget.value
+        let currentValue = e.target.value
         setValue(currentValue)
 
         if (filterSelectorValue === 'contains') {
@@ -169,7 +169,14 @@ function App() {
                 setColumnNameSelectorValue={setColumnNameSelectorValue}
                 setFilterSelectorValue={setFilterSelectorValue}
                 onButtonHandler={onButtonHandler}/>
-            <Paginator currentPage={currentPage} isActive={isActive} disablePrevious={disablePrevious} disableNext={disableNext} onPrevious={onPrevious} onNext={onNext} currentPageCallBack={currentPageCallBack} pages={pages}/>
+            {data.length !== 0 && <Paginator currentPage={currentPage}
+                        isActive={isActive}
+                        disablePrevious={disablePrevious}
+                        disableNext={disableNext}
+                        onPrevious={onPrevious}
+                        onNext={onNext}
+                        currentPageCallBack={currentPageCallBack}
+                        pages={pages}/>}
             <table className="table">
                 <TableHead/>
                 {!isLoading
