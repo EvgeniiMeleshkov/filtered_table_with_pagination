@@ -30,7 +30,6 @@ function App() {
     useEffect(() => {
         setIsLoading(true)
         axios.get(baseUrl).then((response: AxiosResponse<ResponseType>) => {
-
             setArray(response.data)
             setIsLoading(false)
         });
@@ -40,32 +39,86 @@ function App() {
         setData(array)
         setIsLoading(false)
     }
-    const getFilteredData = (filter: string) => {
-        if(!value) {
-            return data
-        }
-        if(filter === 'contains') {
-            return data.filter(el => {
-                return (
-                    el['name'].toLowerCase().includes(value.toLowerCase())
-                    || el['amount'].toString().includes(value.toLowerCase())
-                    || el['distance'].toString().includes(value.toLowerCase())
-                )
-            })
-        }
-    }
-    const filteredData: ResponseType | undefined = getFilteredData(filterSelectorValue)
 
     const filterInput = (e: ChangeEvent<HTMLInputElement>) => {
         let currentValue = e.target.value
         setValue(currentValue)
     }
 
-    const resetCallBack = () => {
-        setData(array)
-        setValue('')
+    const getFilteredData: any = (filter: string) => {
+        if (!value) {
+            return data
+        }
+        if (filter === 'contains') {
+            if (columnNameSelectorValue === 'name') {
+                return data.filter(el => {
+                    return el['name'].toLowerCase().includes(value.toLowerCase())
+                })
+            }
+            if (columnNameSelectorValue === 'amount') {
+                return data.filter(el => {
+                    return el['amount'].toString().toLowerCase().includes(value.toLowerCase())
+                })
+            }
+            if (columnNameSelectorValue === 'distance') {
+                return data.filter(el => {
+                    return el['distance'].toString().toLowerCase().includes(value.toLowerCase())
+                })
+            }
+        }
+        if (filter === '=') {
+            if (columnNameSelectorValue === 'name') {
+                return data.filter(el => {
+                    return el['name'].toLowerCase() === (value.toLowerCase())
+                })
+            }
+            if (columnNameSelectorValue === 'amount') {
+                return data.filter(el => {
+                    return el['amount'].toString().toLowerCase() === (value.toLowerCase())
+                })
+            }
+            if (columnNameSelectorValue === 'distance') {
+                return data.filter(el => {
+                    return el['distance'].toString().toLowerCase() === (value.toLowerCase())
+                })
+            }
+        }
+        if (filter === '>') {
+            if (columnNameSelectorValue === 'name') {
+                return data.filter(el => {
+                    return el['name'].toLowerCase() > (value.toLowerCase())
+                })
+            }
+            if (columnNameSelectorValue === 'amount') {
+                return data.filter(el => {
+                    return el['amount'].toString().toLowerCase() > (value.toLowerCase())
+                })
+            }
+            if (columnNameSelectorValue === 'distance') {
+                return data.filter(el => {
+                    return el['distance'].toString().toLowerCase() > (value.toLowerCase())
+                })
+            }
+        }
+        if (filter === '<') {
+            if (columnNameSelectorValue === 'name') {
+                return data.filter(el => {
+                    return el['name'].toLowerCase() < (value.toLowerCase())
+                })
+            }
+            if (columnNameSelectorValue === 'amount') {
+                return data.filter(el => {
+                    return el['amount'].toString().toLowerCase() < (value.toLowerCase())
+                })
+            }
+            if (columnNameSelectorValue === 'distance') {
+                return data.filter(el => {
+                    return el['distance'].toString().toLowerCase() < (value.toLowerCase())
+                })
+            }
+        }
     }
-
+    let filteredData: ResponseType = getFilteredData(filterSelectorValue)
 
     const limitCountPage = 30
     const [totalRows, setTotalRows] = useState(0)
@@ -87,7 +140,7 @@ function App() {
     }
     useEffect(() => {
         setTotalRows(filteredData!.length)
-        const portion = totalRows / limitCountPage
+        const portion = Math.ceil(totalRows / limitCountPage)
         setTotalPages(portion)
     })
     let pages = []
@@ -118,19 +171,17 @@ function App() {
                 filterSelectorValue={filterSelectorValue}
                 filter={filterInput}
                 value={value}
-                //searchCallBack={searchCallBack}
-                resetCallBack={resetCallBack}
                 setColumnNameSelectorValue={setColumnNameSelectorValue}
                 setFilterSelectorValue={setFilterSelectorValue}
                 onButtonHandler={onButtonHandler}/>
             {data.length !== 0 && <Paginator currentPage={currentPage}
-                        isActive={isActive}
-                        disablePrevious={disablePrevious}
-                        disableNext={disableNext}
-                        onPrevious={onPrevious}
-                        onNext={onNext}
-                        currentPageCallBack={currentPageCallBack}
-                        pages={pages}/>}
+                                             isActive={isActive}
+                                             disablePrevious={disablePrevious}
+                                             disableNext={disableNext}
+                                             onPrevious={onPrevious}
+                                             onNext={onNext}
+                                             currentPageCallBack={currentPageCallBack}
+                                             pages={pages}/>}
             <table className="table">
                 <TableHead/>
                 {!isLoading
