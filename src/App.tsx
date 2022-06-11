@@ -26,9 +26,9 @@ function App() {
     const [value, setValue] = useState('')
 
     const onButtonHandler = () => {
-        axios.get(baseUrl).then((response: AxiosResponse<ResponseType>) => {
+         axios.get(baseUrl).then((response: AxiosResponse<ResponseType>) => {
             setArray(response.data)
-            setData(response.data)
+             setData(array)
         })
     }
 
@@ -42,63 +42,89 @@ function App() {
         setData(array)
         setValue('')
     }
+    const [filtered, setFiltered] = useState<ResponseType>([])
+
+
     const searchCallBack = () => {
-        if (filterSelectorValue === 'contains') {
-            columnNameSelectorValue === 'name' &&
+
+        if (filterSelectorValue === 'contains' && columnNameSelectorValue === 'name') {
             setData(data.filter((el) => {
-                return el.name.toLowerCase().match(value.toLowerCase())
-            }));
-            columnNameSelectorValue === 'amount' &&
-            setData(data.filter((el) => {
-                return el.amount.toString().includes(value);
-            }));
-            columnNameSelectorValue === 'distance' &&
-            setData(data.filter((el) => {
-                return el.distance.toString().includes(value)
-            }));
+                return el.name.toLowerCase().includes(value.toLowerCase())
+            }))
+
         }
-        if (filterSelectorValue === '>') {
-            columnNameSelectorValue === 'amount' &&
-            setData(data.filter((el) => {
-                return el.amount > parseInt(value)
-            }));
-            columnNameSelectorValue === 'distance' &&
-            setData(data.filter((el) => {
-                return el.distance > parseInt(value)
-            }));
-            columnNameSelectorValue === 'name' &&
-            setData(data.filter((el) => {
-                return el.name.toLowerCase() > value.toLowerCase()
-            }));
-        }
-        if(filterSelectorValue === '<'){
-            columnNameSelectorValue === 'amount' &&
-            setData(data.filter((el) => {
-                return el.amount < parseInt(value)
-            }));
-            columnNameSelectorValue === 'distance' &&
-            setData(data.filter((el) => {
-                return el.distance < parseInt(value)
-            }));
-            columnNameSelectorValue === 'name' &&
-            setData(data.filter((el) => {
-                return el.name.toLowerCase() < value.toLowerCase()
-            }));
-        }
-        if(filterSelectorValue === '='){
-            columnNameSelectorValue === 'amount' &&
-            setData(data.filter((el) => {
-                return el.amount === parseInt(value)
-            }));
-            columnNameSelectorValue === 'distance' &&
-            setData(data.filter((el) => {
-                return el.distance === parseInt(value)
-            }));
-            columnNameSelectorValue === 'name' &&
-            setData(data.filter((el) => {
-                return el.name.toLowerCase() === value.toLowerCase()
-            }));
-        }
+//         if (filterSelectorValue === 'contains' && columnNameSelectorValue === 'amount') {
+//             filtered = data.filter((el) => {
+//                 return el.amount.toString().includes(value);
+//             });
+//             setData(filtered)
+//         }
+//         if (filterSelectorValue === 'contains' && columnNameSelectorValue === 'distance') {
+//             filtered = data.filter((el) => {
+//                 return el.distance.toString().includes(value)
+//             })
+//             setData(filtered)
+//         }
+//
+// //----------------------------------------
+//         if (filterSelectorValue === '>' && columnNameSelectorValue === 'amount') {
+//             filtered = data.filter((el) => {
+//                 return el.amount > parseInt(value)
+//             });
+//             setData(filtered)
+//         }
+//         if (filterSelectorValue === '>' && columnNameSelectorValue === 'distance') {
+//             filtered = data.filter((el) => {
+//                 return el.distance > parseInt(value)
+//             });
+//             setData(filtered)
+//         }
+//         if (filterSelectorValue === '>' && columnNameSelectorValue === 'name') {
+//             filtered = data.filter((el) => {
+//                 return el.name.toLowerCase() > value.toLowerCase()
+//             });
+//             setData(filtered)
+//         }
+//
+// //----------------------------------------
+//         if (filterSelectorValue === '<' && columnNameSelectorValue === 'amount') {
+//             filtered = data.filter((el) => {
+//                 return el.amount < parseInt(value)
+//             });
+//             setData(filtered)
+//         }
+//         if (filterSelectorValue === '<' && columnNameSelectorValue === 'distance') {
+//             filtered = data.filter((el) => {
+//                 return el.distance < parseInt(value)
+//             });
+//             setData(filtered)
+//         }
+//         if (filterSelectorValue === '<' && columnNameSelectorValue === 'name') {
+//             filtered = data.filter((el) => {
+//                 return el.name.toLowerCase() < value.toLowerCase()
+//             });
+//             setData(filtered)
+//         }
+//
+// //---------------------------------------
+//         if (filterSelectorValue === '=' && columnNameSelectorValue === 'amount') {
+//             filtered = data.filter((el) => {
+//                 return el.amount === parseInt(value)
+//             });
+//             setData(filtered)
+//         }
+//         if (filterSelectorValue === '=' && columnNameSelectorValue === 'distance') {
+//             filtered = data.filter((el) => {
+//                 return el.distance === parseInt(value)
+//             });
+//             setData(filtered)
+//         }
+//         if (filterSelectorValue === '=' && columnNameSelectorValue === 'name') {
+//             filtered = data.filter((el) => {
+//                 return el.name.toLowerCase() === value.toLowerCase()
+//             });
+//             setData(filtered)
+//         }
     }
 
 
@@ -111,14 +137,13 @@ function App() {
     const currentPortion = data.slice(firstItem, lastItem)
 
 
-
     const currentPageCallBack = (page: number) => {
         setCurrentPage(page)
         console.log('hi')
     }
-    useEffect(()=>{
+    useEffect(() => {
         setTotalRows(data.length)
-        const portion = totalRows/limitCountPage
+        const portion = totalRows / limitCountPage
         setTotalPages(portion)
     })
     let pages = []
